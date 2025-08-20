@@ -350,7 +350,7 @@ export default function App() {
               <MapTooltip {...tooltip} />
             </div>
             <div className="mt-4 overflow-x-auto">
-              <table className="table-auto w-full whitespace-nowrap text-sm">
+              <table className="table-auto w-full lg:w-auto whitespace-nowrap text-sm lg:mx-auto">
                 <thead>
                   <tr>
                     <th className="text-center pr-4">Место</th>
