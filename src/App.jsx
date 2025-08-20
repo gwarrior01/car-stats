@@ -78,22 +78,6 @@ const countryCars = {
     "South Africa": 10_338_783
 };
 
-// Brands share for the global pie (purely illustrative)
-const brandShares2 = [
-  { name: "Toyota", value: 12.5 },
-  { name: "Volkswagen", value: 11.2 },
-  { name: "Hyundai/Kia", value: 8.4 },
-  { name: "GM", value: 7.8 },
-  { name: "Ford", value: 6.1 },
-  { name: "Honda", value: 5.5 },
-  { name: "Nissan", value: 4.2 },
-  { name: "Stellantis", value: 7.0 },
-  { name: "BYD", value: 4.8 },
-  { name: "Tesla", value: 3.1 },
-  { name: "Geely", value: 3.6 },
-  { name: "Other", value: 26.0 },
-];
-
 const brandShares = [
     { name: "Toyota", value: 8_569_973 },
     { name: "Volkswagen", value: 4_965_621 },
@@ -342,7 +326,8 @@ export default function App() {
         {/* Pie Chart Card */}
         <Card className="shadow-sm">
           <CardHeader className="pb-0">
-            <CardTitle className="text-lg">Данные по продажам автомобилей ведущими брендами за 2023г.</CardTitle>
+            <CardTitle className="text-lg">Данные по продажам автомобилей ведущими брендами за 2023г.
+                Данные <a href="https://roadgenius.com/cars/statistics/sales-by-manufacturer/">Worldwide Car Sales</a></CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
