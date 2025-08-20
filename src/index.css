@@ -3,3 +3,8 @@ body {
   margin: 0;
   font-family: sans-serif;
 }
+
+/* Smooth bar animations */
+.recharts-bar-rectangles rect {
+  transition: all 0.4s ease;
+}
