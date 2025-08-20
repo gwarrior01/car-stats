@@ -130,20 +130,14 @@ function MapTooltip({ x, y, content, visible }) {
 function useChoroplethScale() {
   const values = Object.values(countryCars);
   const max = Math.max(1, ...values);
-  const steps = [
-    "#eef2ff",
-    "#dbeafe",
-    "#bfdbfe",
-    "#93c5fd",
-    "#60a5fa",
-    "#3b82f6",
-    "#1d4ed8",
-  ];
+
   return (v) => {
     if (!v) return "#f8fafc";
-    const r = v / max;
-    const idx = Math.min(steps.length - 1, Math.floor(r * steps.length));
-    return steps[idx];
+    const r = v / max; // нормализация 0..1
+
+    // HSL: синий цвет (hue = 220), насыщенность 100%, яркость уменьшается от 90% до 30%
+    const lightness = 90 - r * 60;
+    return `hsl(220, 100%, ${lightness}%)`;
   };
 }
 
