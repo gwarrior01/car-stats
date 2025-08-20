@@ -281,7 +281,7 @@ export default function App() {
           </CardHeader>
           <CardContent>
             <div className="relative">
-              <ComposableMap projectionConfig={{ scale: 220 }} className="w-full h-[750px]" style={{ width: "100%" }}>
+              <ComposableMap projectionConfig={{ scale: 220 }} className="w-full h-[320px] sm:h-[500px] md:h-[650px] lg:h-[750px]" style={{ width: "100%" }}>
                 <Sphere stroke="#94a3b8" fill="none" />
                 <Geographies geography={WORLD_TOPOJSON}>
                   {({ geographies }) => (
@@ -310,6 +310,31 @@ export default function App() {
                               setTooltip((t) => ({ ...t, x: evt.clientX, y: evt.clientY }));
                             }}
                             onMouseLeave={() => setTooltip((t) => ({ ...t, visible: false }))}
+                            onTouchStart={(evt) => {
+                              const touch = evt.touches?.[0];
+                              const x = touch?.clientX ?? 0;
+                              const y = touch?.clientY ?? 0;
+                              const countryName = normalizeName(geo.properties);
+                              const value = countryCars[countryName] || 0;
+                              setTooltip({
+                                visible: true,
+                                x,
+                                y,
+                                content: (
+                                  <div className="flex flex-col">
+                                    <span className="font-medium">{countryName}</span>
+                                    <span className="text-slate-600">{value ? `${formatNumber(value)} авто` : "Нет данных"}</span>
+                                  </div>
+                                ),
+                              });
+                            }}
+                            onTouchMove={(evt) => {
+                              const touch = evt.touches?.[0];
+                              const x = touch?.clientX ?? 0;
+                              const y = touch?.clientY ?? 0;
+                              setTooltip((t) => ({ ...t, x, y, visible: true }));
+                            }}
+                            onTouchEnd={() => setTooltip((t) => ({ ...t, visible: false }))}
                             style={{
                               default: { fill: colorFor(value), outline: "none" },
                               hover: { fill: "#0ea5e9", outline: "none" },
@@ -324,8 +349,8 @@ export default function App() {
               </ComposableMap>
               <MapTooltip {...tooltip} />
             </div>
-            <div className="mt-4 flex justify-center">
-              <table className="table-auto w-auto whitespace-nowrap text-sm">
+            <div className="mt-4 overflow-x-auto">
+              <table className="table-auto w-full whitespace-nowrap text-sm">
                 <thead>
                   <tr>
                     <th className="text-center pr-4">Место</th>
@@ -360,7 +385,7 @@ export default function App() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
-              <div className="col-span-2 h-[530px]">
+              <div className="col-span-2 h-[320px] sm:h-[420px] md:h-[530px]">
                 <ResponsiveContainer width="100%" height="100%">
                     <PieChart margin={{ top: 20, right: 40, bottom: 20, left: 40 }}>
                     <RechartsTooltip formatter={(value) => formatNumber(value)} />
@@ -370,8 +395,8 @@ export default function App() {
                             nameKey="name"
                             cx="50%"
                             cy="50%"
-                            outerRadius={225}
-                            innerRadius={105}
+                            outerRadius="70%"
+                            innerRadius="40%"
                             paddingAngle={1}
                             labelLine={false}
                             label={renderPieLabel}
@@ -383,9 +408,9 @@ export default function App() {
                   </PieChart>
               </ResponsiveContainer>
               </div>
-              <div className="col-span-1">
+              <div className="col-span-1 flex justify-center lg:justify-start">
                 <div className="overflow-x-auto">
-                  <table className="table-auto w-auto whitespace-nowrap text-sm">
+                  <table className="table-auto w-auto whitespace-nowrap text-sm mx-auto">
                     <thead>
                       <tr>
                         <th className="text-center pr-2">Место</th>
