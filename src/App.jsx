@@ -347,7 +347,7 @@ export default function App() {
             <div className="mt-4 flex items-center justify-between text-sm text-slate-600">
               <div>
                 Всего автомобилей: {formatNumber(totalFromCountries)}<br/>
-                По данным <a href="https://www.oica.net/">International Organization of Motor Vehicle Manufacturers 2015-2020</a>
+                По данным <a href="https://www.oica.net/" className="text-blue-600 underline hover:text-blue-700 hover:underline transition-colors" target="_blank" rel="noopener noreferrer">International Organization of Motor Vehicle Manufacturers 2015-2020</a>
               </div>
             </div>
           </CardContent>
@@ -356,8 +356,7 @@ export default function App() {
         {/* Pie Chart Card */}
         <Card className="shadow-sm">
           <CardHeader className="pb-0">
-            <CardTitle className="text-lg">Данные по продажам автомобилей ведущими брендами за 2023г.
-                Данные <a href="https://roadgenius.com/cars/statistics/sales-by-manufacturer/">Worldwide Car Sales</a></CardTitle>
+            <CardTitle className="text-lg">Данные по продажам за 2023г</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
@@ -406,6 +405,10 @@ export default function App() {
                   </table>
                 </div>
               </div>
+            </div>
+            <div className="mt-4 flex items-center justify-between text-sm text-slate-600">
+              <div>По данным <a className="text-blue-600 underline hover:text-blue-700 hover:underline transition-colors" target="_blank" rel="noopener noreferrer"
+                                href="https://roadgenius.com/cars/statistics/sales-by-manufacturer/">Worldwide Car Sales</a></div>
             </div>
           </CardContent>
         </Card>
