@@ -374,7 +374,7 @@ export default function App() {
                             outerRadius={225}
                             innerRadius={105}
                             paddingAngle={1}
-                            labelLine={true}
+                            labelLine={false}
                             label={renderPieLabel}
                         >
                       {brandsAbs.map((entry, index) => (
