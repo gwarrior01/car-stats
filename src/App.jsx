@@ -281,7 +281,7 @@ export default function App() {
           </CardHeader>
           <CardContent>
             <div className="relative">
-              <ComposableMap projectionConfig={{ scale: 200 }} className="w-full h-[620px]" style={{ width: "100%" }}>
+              <ComposableMap projectionConfig={{ scale: 220 }} className="w-full h-[750px]" style={{ width: "100%" }}>
                 <Sphere stroke="#94a3b8" fill="none" />
                 <Geographies geography={WORLD_TOPOJSON}>
                   {({ geographies }) => (
@@ -325,10 +325,10 @@ export default function App() {
               <MapTooltip {...tooltip} />
             </div>
             <div className="mt-4 flex justify-center">
-              <table className="text-sm">
+              <table className="table-auto w-auto whitespace-nowrap text-sm">
                 <thead>
                   <tr>
-                    <th className="text-left pr-4">Место</th>
+                    <th className="text-center pr-4">Место</th>
                     <th className="text-left pr-4">Страна</th>
                     <th className="text-right">Количество</th>
                   </tr>
@@ -336,7 +336,7 @@ export default function App() {
                 <tbody>
                   {topCountries.map(([name, value], index) => (
                     <tr key={name}>
-                      <td className="text-left pr-4">{index + 1}</td>
+                      <td className="text-center pr-4">{index + 1}</td>
                       <td className="text-left pr-4">{name}</td>
                       <td className="text-right">{formatNumber(value)}</td>
                     </tr>
@@ -385,10 +385,10 @@ export default function App() {
               </div>
               <div className="col-span-1">
                 <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
+                  <table className="table-auto w-auto whitespace-nowrap text-sm">
                     <thead>
                       <tr>
-                        <th className="text-left pr-2">Место</th>
+                        <th className="text-center pr-2">Место</th>
                         <th className="text-left">Бренд</th>
                         <th className="text-right">Количество</th>
                       </tr>
@@ -396,7 +396,7 @@ export default function App() {
                     <tbody>
                       {topBrands.map((b, index) => (
                         <tr key={b.name}>
-                          <td className="text-left pr-2">{index + 1}</td>
+                          <td className="text-center pr-2">{index + 1}</td>
                           <td>{b.name}</td>
                           <td className="text-right">{formatNumber(b.value)}</td>
                         </tr>
