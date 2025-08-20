@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ComposableMap, Geographies, Geography } from "react-simple-maps";
+import { ComposableMap, Geographies, Geography, Sphere } from "react-simple-maps";
 import { PieChart, Pie, Tooltip as RechartsTooltip, Cell, ResponsiveContainer, Legend } from "recharts";
 import { motion } from "framer-motion";
 
@@ -156,14 +156,8 @@ function useWorldTotals() {
     () => Object.values(countryCars).reduce((a, b) => a + b, 0),
     []
   );
-  // Convert brand share percent into absolute numbers scaled to country total
-  const brandsAbs = useMemo(() => {
-    return brandShares.map((b) => ({
-      name: b.name,
-      value: Math.round((b.value / 100) * totalFromCountries),
-      percent: b.value,
-    }));
-  }, [totalFromCountries]);
+  // absolute sales numbers per brand
+  const brandsAbs = useMemo(() => brandShares, []);
   return { totalFromCountries, brandsAbs };
 }
 
@@ -191,6 +185,20 @@ function useChoroplethScale() {
     const lightness = 90 - r * 60;
     return `hsl(220, 100%, ${lightness}%)`;
   };
+}
+
+function renderPieLabel({ x, y, name, percent }) {
+  return (
+    <text
+      x={x}
+      y={y}
+      textAnchor="middle"
+      dominantBaseline="central"
+      fontSize={10}
+    >
+      {`${name} ${(percent * 100).toFixed(0)}%`}
+    </text>
+  );
 }
 
 // --- простейшие самотесты без jest/vitest ---
@@ -226,12 +234,12 @@ function runSelfTests({ totalFromCountries, brandsAbs }) {
     details: `value=${countryCars["South Africa"]}`,
   });
 
-  // 3) brandShares converted to absolute sums ~ totalFromCountries
-  const sumBrands = brandsAbs.reduce((a, b) => a + b.value, 0);
+  // 3) brands are sorted by value descending
+  const sortedDesc = brandsAbs.every((b, i, arr) => i === 0 || arr[i - 1].value >= b.value);
   results.push({
-    name: "brandsAbs sum ≈ total",
-    ok: approx(sumBrands, totalFromCountries, 0.02), // 2% из‑за округления и 100.2%
-    details: `sumBrands=${sumBrands} total=${totalFromCountries}`,
+    name: "brandsAbs sorted desc",
+    ok: sortedDesc,
+    details: `top=${brandsAbs[0]?.value} bottom=${brandsAbs[brandsAbs.length - 1]?.value}`,
   });
 
   const passed = results.filter((r) => r.ok).length;
@@ -243,6 +251,16 @@ export default function App() {
   const { totalFromCountries, brandsAbs } = useWorldTotals();
   const colorFor = useChoroplethScale();
   const [tooltip, setTooltip] = useState({ visible: false, x: 0, y: 0, content: "" });
+
+  const topCountries = useMemo(
+    () =>
+      Object.entries(countryCars)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 10),
+    []
+  );
+
+  const topBrands = useMemo(() => brandsAbs.slice(0, 10), [brandsAbs]);
 
   // самотесты
   const [{ results: testResults, passed, failed }, setTests] = useState({ results: [], passed: 0, failed: 0 });
@@ -267,6 +285,7 @@ export default function App() {
           <CardContent>
             <div className="relative">
               <ComposableMap projectionConfig={{ scale: 200 }} className="w-full h-[620px]" style={{ width: "100%" }}>
+                <Sphere stroke="#94a3b8" fill="none" />
                 <Geographies geography={WORLD_TOPOJSON}>
                   {({ geographies }) => (
                     <>
@@ -308,6 +327,24 @@ export default function App() {
               </ComposableMap>
               <MapTooltip {...tooltip} />
             </div>
+            <div className="mt-4 overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr>
+                    <th className="text-left">Страна</th>
+                    <th className="text-right">Количество</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {topCountries.map(([name, value]) => (
+                    <tr key={name}>
+                      <td>{name}</td>
+                      <td className="text-right">{formatNumber(value)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
             <div className="mt-4 flex items-center justify-between text-sm text-slate-600">
               <div>
                 Всего автомобилей: {formatNumber(totalFromCountries)}<br/>
@@ -345,14 +382,34 @@ export default function App() {
                       outerRadius={150}
                       innerRadius={70}
                       paddingAngle={1}
-                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      label={renderPieLabel}
                     >
                       {brandsAbs.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
                       ))}
                     </Pie>
                   </PieChart>
-                </ResponsiveContainer>
+              </ResponsiveContainer>
+              </div>
+              <div className="col-span-1">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr>
+                        <th className="text-left">Бренд</th>
+                        <th className="text-right">Количество</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {topBrands.map((b) => (
+                        <tr key={b.name}>
+                          <td>{b.name}</td>
+                          <td className="text-right">{formatNumber(b.value)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </CardContent>
