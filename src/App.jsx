@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ComposableMap, Geographies, Geography, Sphere } from "react-simple-maps";
-import { PieChart, Pie, Tooltip as RechartsTooltip, Cell, ResponsiveContainer, Legend } from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
 import { motion } from "framer-motion";
 
 // TopoJSON for world map
@@ -390,7 +390,6 @@ export default function App() {
               <div className="col-span-2 h-[380px] sm:h-[500px] md:h-[620px]">
                 <ResponsiveContainer width="100%" height="100%">
                     <PieChart margin={{ top: 24, right: 44, bottom: 24, left: 44 }}>
-                    <RechartsTooltip formatter={(value) => formatNumber(value)} />
                         <Pie
                             data={brandsAbs}
                             dataKey="value"
@@ -402,6 +401,27 @@ export default function App() {
                             paddingAngle={1}
                             labelLine={false}
                             label={renderPieLabel}
+                            onMouseMove={(data, index, e) => {
+                              const name = data?.name ?? data?.payload?.name ?? "";
+                              const value = data?.value ?? data?.payload?.value ?? 0;
+                              const x = e?.clientX ?? 0;
+                              const y = e?.clientY ?? 0;
+                              if (name) {
+                                setTooltip({
+                                  visible: true,
+                                  x,
+                                  y,
+                                  content: (
+                                    <div className="flex flex-col">
+                                      <span className="font-medium">{name}</span>
+                                      <span className="text-slate-600">{formatNumber(value)} авто</span>
+                                    </div>
+                                  ),
+                                });
+                              }
+                            }}
+                            onMouseLeave={() => setTooltip((t) => ({ ...t, visible: false }))
+                            }
                         >
                       {brandsAbs.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
@@ -410,6 +430,7 @@ export default function App() {
                   </PieChart>
               </ResponsiveContainer>
               </div>
+              <MapTooltip {...tooltip} />
               <div className="col-span-1 flex justify-center lg:justify-start">
                 <div className="overflow-x-auto">
                   <table className="table-auto w-auto whitespace-nowrap text-sm mx-auto">
