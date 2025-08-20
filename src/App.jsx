@@ -67,7 +67,6 @@ const countryCars = {
     "Thailand": 19_773_217,
     "United Arab Emirates": 3_181_465,
     "Vietnam": 4_785_415,
-    "Africa": 60_556_712,
     "Algeria": 6_239_942,
     "Egypt": 6_918_213,
     "Libya": 3_259_826,
@@ -325,18 +324,20 @@ export default function App() {
               </ComposableMap>
               <MapTooltip {...tooltip} />
             </div>
-            <div className="mt-4 overflow-x-auto">
-              <table className="w-full text-sm">
+            <div className="mt-4 flex justify-center">
+              <table className="text-sm">
                 <thead>
                   <tr>
-                    <th className="text-left">Страна</th>
+                    <th className="text-left pr-4">Место</th>
+                    <th className="text-left pr-4">Страна</th>
                     <th className="text-right">Количество</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {topCountries.map(([name, value]) => (
+                  {topCountries.map(([name, value], index) => (
                     <tr key={name}>
-                      <td>{name}</td>
+                      <td className="text-left pr-4">{index + 1}</td>
+                      <td className="text-left pr-4">{name}</td>
                       <td className="text-right">{formatNumber(value)}</td>
                     </tr>
                   ))}
@@ -387,13 +388,15 @@ export default function App() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr>
+                        <th className="text-left pr-2">Место</th>
                         <th className="text-left">Бренд</th>
                         <th className="text-right">Количество</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {topBrands.map((b) => (
+                      {topBrands.map((b, index) => (
                         <tr key={b.name}>
+                          <td className="text-left pr-2">{index + 1}</td>
                           <td>{b.name}</td>
                           <td className="text-right">{formatNumber(b.value)}</td>
                         </tr>
