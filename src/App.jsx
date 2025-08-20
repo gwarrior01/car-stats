@@ -191,7 +191,9 @@ function renderPieLabel({ x, y, name, percent }) {
       y={y}
       textAnchor="middle"
       dominantBaseline="central"
-      fontSize={10}
+      fontSize={11}
+      fontFamily="Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji'"
+      fill="#0f172a"
     >
       {`${name} ${(percent * 100).toFixed(0)}%`}
     </text>
@@ -385,9 +387,9 @@ export default function App() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
-              <div className="col-span-2 h-[320px] sm:h-[420px] md:h-[530px]">
+              <div className="col-span-2 h-[380px] sm:h-[500px] md:h-[620px]">
                 <ResponsiveContainer width="100%" height="100%">
-                    <PieChart margin={{ top: 20, right: 40, bottom: 20, left: 40 }}>
+                    <PieChart margin={{ top: 24, right: 44, bottom: 24, left: 44 }}>
                     <RechartsTooltip formatter={(value) => formatNumber(value)} />
                         <Pie
                             data={brandsAbs}
@@ -395,8 +397,8 @@ export default function App() {
                             nameKey="name"
                             cx="50%"
                             cy="50%"
-                            outerRadius="70%"
-                            innerRadius="40%"
+                            outerRadius="80%"
+                            innerRadius="50%"
                             paddingAngle={1}
                             labelLine={false}
                             label={renderPieLabel}
