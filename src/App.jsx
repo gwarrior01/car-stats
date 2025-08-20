@@ -203,7 +203,6 @@ export default function App() {
       <header className="sticky top-0 z-10 bg-white/80 backdrop-blur border-b">
         <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
           <h1 className="text-2xl font-semibold tracking-tight">CarStats</h1>
-          <div className="text-sm text-slate-500">Demo • React • Map + Pie</div>
         </div>
       </header>
 
@@ -215,7 +214,7 @@ export default function App() {
           </CardHeader>
           <CardContent>
             <div className="relative">
-              <ComposableMap projectionConfig={{ scale: 140 }} className="w-full h-[520px]">
+              <ComposableMap projectionConfig={{ scale: 200 }} className="w-full h-[620px]" style={{ width: "100%" }}>
                 <Geographies geography={WORLD_TOPOJSON}>
                   {({ geographies }) => (
                     <>
@@ -319,28 +318,6 @@ export default function App() {
             </div>
           </CardContent>
         </Card>
-
-        {/* Self-tests summary */}
-        <Card className="shadow-sm">
-          <CardHeader className="pb-0">
-            <CardTitle className="text-lg">Self-tests</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-sm text-slate-600">Пройдено: {passed} • Провалено: {failed}</div>
-            <ul className="mt-2 list-disc pl-5 text-sm text-slate-700">
-              {testResults?.map((t, idx) => (
-                <li key={idx} className={t.ok ? "text-emerald-600" : "text-rose-600"}>
-                  {t.name} — {t.ok ? "OK" : "FAIL"} <span className="text-slate-500">({t.details})</span>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
-
-        {/* Footer */}
-        <div className="py-2 text-center text-xs text-slate-500">
-          Демо-данные для прототипа. Замените на реальные источники при интеграции.
-        </div>
       </main>
     </div>
   );
