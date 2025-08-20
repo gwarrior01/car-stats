@@ -109,7 +109,12 @@ export default function BrandDynamics() {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis type="number" />
                 <YAxis dataKey="name" type="category" width={100} />
-                <Bar dataKey="value" isAnimationActive={false}>
+                <Bar
+                  dataKey="value"
+                  isAnimationActive
+                  animationDuration={400}
+                  animationEasing="ease-in-out"
+                >
                   {data.map((entry, index) => (
                     <Cell
                       key={`cell-${entry.name}`}
