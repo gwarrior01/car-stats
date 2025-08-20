@@ -38,8 +38,6 @@ const countryCars = {
     "Serbia": 2_430_672,
     "Turkey": 18_512_642,
     "Ukraine": 8_450_000,
-    "America": 452_977_372,
-    "Nafta": 360_911_859,
     "Canada": 26_788_244,
     "Mexico": 45_086_615,
     "United States of America": 289_037_000,
@@ -350,12 +348,6 @@ export default function App() {
                 Всего автомобилей: {formatNumber(totalFromCountries)}<br/>
                 По данным <a href="https://www.oica.net/">International Organization of Motor Vehicle Manufacturers 2015-2020</a>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="inline-block h-3 w-3 rounded bg-[#eef2ff]"></span>
-                мало
-                <span className="inline-block h-3 w-3 rounded bg-[#1d4ed8]"></span>
-                много
-              </div>
             </div>
           </CardContent>
         </Card>
@@ -372,7 +364,6 @@ export default function App() {
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <RechartsTooltip formatter={(value) => formatNumber(value)} />
-                    <Legend />
                     <Pie
                       data={brandsAbs}
                       dataKey="value"
