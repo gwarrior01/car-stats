@@ -8,7 +8,6 @@ import { motion } from "framer-motion";
 // TopoJSON for world map
 const WORLD_TOPOJSON = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
-// --- Mock data ---
 // Country -> total cars (very roughly made-up numbers for demo)
 const countryCars = {
     "Austria": 5_633_525,
