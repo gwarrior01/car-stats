@@ -361,21 +361,22 @@ export default function App() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
-              <div className="col-span-2 h-[420px]">
+              <div className="col-span-2 h-[530px]">
                 <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
+                    <PieChart margin={{ top: 20, right: 40, bottom: 20, left: 40 }}>
                     <RechartsTooltip formatter={(value) => formatNumber(value)} />
-                    <Pie
-                      data={brandsAbs}
-                      dataKey="value"
-                      nameKey="name"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={150}
-                      innerRadius={70}
-                      paddingAngle={1}
-                      label={renderPieLabel}
-                    >
+                        <Pie
+                            data={brandsAbs}
+                            dataKey="value"
+                            nameKey="name"
+                            cx="50%"
+                            cy="50%"
+                            outerRadius={225}
+                            innerRadius={105}
+                            paddingAngle={1}
+                            labelLine={true}
+                            label={renderPieLabel}
+                        >
                       {brandsAbs.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
                       ))}
