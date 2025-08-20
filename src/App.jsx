@@ -79,7 +79,7 @@ const countryCars = {
 };
 
 // Brands share for the global pie (purely illustrative)
-const brandShares = [
+const brandShares2 = [
   { name: "Toyota", value: 12.5 },
   { name: "Volkswagen", value: 11.2 },
   { name: "Hyundai/Kia", value: 8.4 },
@@ -93,6 +93,39 @@ const brandShares = [
   { name: "Geely", value: 3.6 },
   { name: "Other", value: 26.0 },
 ];
+
+const brandShares = [
+    { name: "Toyota", value: 8_569_973 },
+    { name: "Volkswagen", value: 4_965_621 },
+    { name: "Honda", value: 3_774_161 },
+    { name: "Ford", value: 3_729_817 },
+    { name: "Hyundai", value: 3_540_787 },
+    { name: "Nissan", value: 2_975_048 },
+    { name: "Suzuki", value: 2_916_149 },
+    { name: "Kia", value: 2_731_370 },
+    { name: "Chevrolet", value: 2_692_391 },
+    { name: "BYD", value: 2_683_743 },
+    { name: "BMW", value: 2_101_487 },
+    { name: "Mercedes‑Benz", value: 2_063_820 },
+    { name: "Audi", value: 1_772_892 },
+    { name: "Tesla", value: 1_770_354 },
+    { name: "Renault", value: 1_435_847 },
+    { name: "Fiat", value: 1_235_442 },
+    { name: "Mazda", value: 1_182_034 },
+    { name: "Peugeot", value: 1_060_432 },
+    { name: "Changan", value: 1_011_336 },
+    { name: "Jeep", value: 1_008_181 },
+    { name: "Geely", value: 1_002_311 },
+    { name: "Tata", value: 937_087 },
+    { name: "Subaru", value: 889_975 },
+    { name: "Wuling", value: 851_935 },
+    { name: "GAC", value: 839_537 },
+    { name: "Skoda", value: 804_710 },
+    { name: "Chery", value: 799_063 },
+    { name: "Daihatsu", value: 783_416 },
+    { name: "Volvo", value: 750_483 },
+    { name: "Buick", value: 702_821 }
+]
 
 // Colors for the pie segments (kept neutral; Recharts will cycle if fewer than data)
 const PIE_COLORS = [
@@ -309,7 +342,7 @@ export default function App() {
         {/* Pie Chart Card */}
         <Card className="shadow-sm">
           <CardHeader className="pb-0">
-            <CardTitle className="text-lg">Доли брендов в мировом автопарке</CardTitle>
+            <CardTitle className="text-lg">Данные по продажам автомобилей ведущими брендами за 2023г.</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
@@ -336,21 +369,6 @@ export default function App() {
                   </PieChart>
                 </ResponsiveContainer>
               </div>
-              <motion.div
-                className="col-span-1"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-              >
-                <div className="rounded-2xl border p-4 bg-white shadow-sm">
-                  <div className="text-sm text-slate-500">Всего автомобилей (по круговой):</div>
-                  <div className="text-3xl font-semibold">{formatNumber(totalFromCountries)}</div>
-                  <p className="mt-3 text-slate-600 text-sm">
-                    Диаграмма показывает условные доли крупнейших брендов. Размер сектора
-                    пропорционален доле бренда от общего количества автомобилей.
-                  </p>
-                </div>
-              </motion.div>
             </div>
           </CardContent>
         </Card>
