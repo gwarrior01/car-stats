@@ -10,6 +10,7 @@ import {
   Cell,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import csvData from "@/dataset/car_brand_dataset.csv?raw";
 
 const COLORS = [
   "#1f77b4",
@@ -24,21 +25,30 @@ const COLORS = [
   "#17becf",
 ];
 
-// Произвольные (выдуманные) продажи брендов по годам, тыс. авто
-const SERIES = [
-  { year: 2019, Toyota: 8500, Volkswagen: 6400, Honda: 3800, Ford: 3600, Hyundai: 3400, Nissan: 3300, Suzuki: 3000, Kia: 2900, Chevrolet: 2700, BYD: 2500 },
-  { year: 2020, Toyota: 8600, Volkswagen: 6500, Honda: 3850, Ford: 3550, Hyundai: 3450, Nissan: 3350, Suzuki: 3050, Kia: 2950, Chevrolet: 2750, BYD: 2600 },
-  { year: 2021, Toyota: 8700, Volkswagen: 6600, Honda: 3900, Ford: 3600, Hyundai: 3500, Nissan: 3400, Suzuki: 3100, Kia: 3000, Chevrolet: 2800, BYD: 2700 },
-  { year: 2022, Toyota: 8900, Volkswagen: 6700, Honda: 4000, Ford: 3650, Hyundai: 3550, Nissan: 3450, Suzuki: 3150, Kia: 3050, Chevrolet: 2850, BYD: 2800 },
-  { year: 2023, Toyota: 9100, Volkswagen: 6800, Honda: 4100, Ford: 3700, Hyundai: 3600, Nissan: 3500, Suzuki: 3200, Kia: 3100, Chevrolet: 2900, BYD: 3000 },
-];
+function parseCSV(csv) {
+  const lines = csv.trim().split("\n");
+  const map = new Map();
+  for (let i = 1; i < lines.length; i++) {
+    const [yearStr, brand, valueStr] = lines[i].split(",");
+    const year = Number(yearStr);
+    const value = Number(valueStr);
+    if (!map.has(year)) {
+      map.set(year, { year });
+    }
+    map.get(year)[brand] = value;
+  }
+  return Array.from(map.values()).sort((a, b) => a.year - b.year);
+}
+
+const SERIES = parseCSV(csvData);
 
 function extractStep(step) {
   const entry = SERIES[Math.min(step, SERIES.length - 1)];
   const { year, ...brands } = entry;
   const data = Object.entries(brands)
     .map(([name, value]) => ({ name, value }))
-    .sort((a, b) => b.value - a.value);
+    .sort((a, b) => b.value - a.value)
+    .slice(0, 10);
   return { year, data };
 }
 
