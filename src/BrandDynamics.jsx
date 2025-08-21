@@ -40,7 +40,7 @@ const ALL_BRANDS = Array.from(
 );
 
 const N = 17;
-const TICK = 800;
+const TICK = 1200;
 
 export default function BrandDynamics() {
   const svgRef = useRef(null);
@@ -75,10 +75,10 @@ export default function BrandDynamics() {
 
     const yearLabel = svg
       .append("text")
-      .attr("x", width - margin.right)
+      .attr("x", margin.left + innerWidth / 2)
       // Place the year above the plotting area (not overlapping the x-axis)
       .attr("y", margin.top / 2)
-      .attr("text-anchor", "end")
+      .attr("text-anchor", "middle")
       .attr("dominant-baseline", "middle")
       .attr("font-size", 28)
       .attr("font-weight", 400)
@@ -302,7 +302,7 @@ export default function BrandDynamics() {
       <main className="mx-auto max-w-7xl px-4 py-6 space-y-6">
         <Card className="shadow-sm">
           <CardHeader>
-            <CardTitle>Динамика брендов</CardTitle>
+            <CardTitle>Динамика выпуска автоконцернов (за всё время)</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center gap-4">
