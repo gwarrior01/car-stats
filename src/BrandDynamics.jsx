@@ -39,7 +39,7 @@ const ALL_BRANDS = Array.from(
   )
 );
 
-const N = 10;
+const N = 17;
 const TICK = 800;
 
 export default function BrandDynamics() {
