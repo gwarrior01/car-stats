@@ -75,7 +75,136 @@ const countryCars = {
     "South Africa": 10_338_783
 };
 
-const brandShares = [
+const brandSharesByYear = {
+  2019: [
+    { name: "Toyota", value: 8578155 },
+    { name: "Volkswagen", value: 6669186 },
+    { name: "Honda", value: 4958195 },
+    { name: "Ford", value: 5016542 },
+    { name: "Hyundai", value: 4168921 },
+    { name: "Nissan", value: 4497703 },
+    { name: "Suzuki", value: 2910805 },
+    { name: "Kia", value: 2667969 },
+    { name: "Chevrolet", value: 3890933 },
+    { name: "BYD", value: 457849 },
+    { name: "BMW", value: 2101487 },
+    { name: "Mercedes‑Benz", value: 2063820 },
+    { name: "Audi", value: 1772892 },
+    { name: "Tesla", value: 1770354 },
+    { name: "Renault", value: 1435847 },
+    { name: "Fiat", value: 1235442 },
+    { name: "Mazda", value: 1182034 },
+    { name: "Peugeot", value: 1060432 },
+    { name: "Changan", value: 1011336 },
+    { name: "Jeep", value: 1008181 },
+    { name: "Geely", value: 1002311 },
+    { name: "Tata", value: 937087 },
+    { name: "Subaru", value: 889975 },
+    { name: "Wuling", value: 851935 },
+    { name: "GAC", value: 839537 },
+    { name: "Skoda", value: 804710 },
+    { name: "Chery", value: 799063 },
+    { name: "Daihatsu", value: 783416 },
+    { name: "Volvo", value: 750483 },
+    { name: "Buick", value: 702821 }
+  ],
+  2020: [
+    { name: "Toyota", value: 7583468 },
+    { name: "Volkswagen", value: 5552064 },
+    { name: "Honda", value: 4284278 },
+    { name: "Ford", value: 4048340 },
+    { name: "Hyundai", value: 3405642 },
+    { name: "Nissan", value: 3533792 },
+    { name: "Chevrolet", value: 3187353 },
+    { name: "Kia", value: 2571520 },
+    { name: "Suzuki", value: 2374281 },
+    { name: "BYD", value: 404982 },
+    { name: "BMW", value: 2101487 },
+    { name: "Mercedes‑Benz", value: 2063820 },
+    { name: "Audi", value: 1772892 },
+    { name: "Tesla", value: 1770354 },
+    { name: "Renault", value: 1435847 },
+    { name: "Fiat", value: 1235442 },
+    { name: "Mazda", value: 1182034 },
+    { name: "Peugeot", value: 1060432 },
+    { name: "Changan", value: 1011336 },
+    { name: "Jeep", value: 1008181 },
+    { name: "Geely", value: 1002311 },
+    { name: "Tata", value: 937087 },
+    { name: "Subaru", value: 889975 },
+    { name: "Wuling", value: 851935 },
+    { name: "GAC", value: 839537 },
+    { name: "Skoda", value: 804710 },
+    { name: "Chery", value: 799063 },
+    { name: "Daihatsu", value: 783416 },
+    { name: "Volvo", value: 750483 },
+    { name: "Buick", value: 702821 }
+  ],
+  2021: [
+    { name: "Toyota", value: 8254315 },
+    { name: "Volkswagen", value: 5080426 },
+    { name: "Honda", value: 4219686 },
+    { name: "Ford", value: 3751737 },
+    { name: "Hyundai", value: 3606423 },
+    { name: "Nissan", value: 3449805 },
+    { name: "Kia", value: 2771272 },
+    { name: "Suzuki", value: 2664574 },
+    { name: "Chevrolet", value: 2522139 },
+    { name: "BYD", value: 738285 },
+    { name: "BMW", value: 2101487 },
+    { name: "Mercedes‑Benz", value: 2063820 },
+    { name: "Audi", value: 1772892 },
+    { name: "Tesla", value: 1770354 },
+    { name: "Renault", value: 1435847 },
+    { name: "Fiat", value: 1235442 },
+    { name: "Mazda", value: 1182034 },
+    { name: "Peugeot", value: 1060432 },
+    { name: "Changan", value: 1011336 },
+    { name: "Jeep", value: 1008181 },
+    { name: "Geely", value: 1002311 },
+    { name: "Tata", value: 937087 },
+    { name: "Subaru", value: 889975 },
+    { name: "Wuling", value: 851935 },
+    { name: "GAC", value: 839537 },
+    { name: "Skoda", value: 804710 },
+    { name: "Chery", value: 799063 },
+    { name: "Daihatsu", value: 783416 },
+    { name: "Volvo", value: 750483 },
+    { name: "Buick", value: 702821 }
+  ],
+  2022: [
+    { name: "Toyota", value: 8282491 },
+    { name: "Volkswagen", value: 4807921 },
+    { name: "Honda", value: 3643675 },
+    { name: "Ford", value: 3529127 },
+    { name: "Hyundai", value: 3382405 },
+    { name: "Nissan", value: 2824267 },
+    { name: "Suzuki", value: 2841135 },
+    { name: "Kia", value: 2687205 },
+    { name: "Chevrolet", value: 2518572 },
+    { name: "BYD", value: 1819983 },
+    { name: "BMW", value: 2101487 },
+    { name: "Mercedes‑Benz", value: 2063820 },
+    { name: "Audi", value: 1772892 },
+    { name: "Tesla", value: 1770354 },
+    { name: "Renault", value: 1435847 },
+    { name: "Fiat", value: 1235442 },
+    { name: "Mazda", value: 1182034 },
+    { name: "Peugeot", value: 1060432 },
+    { name: "Changan", value: 1011336 },
+    { name: "Jeep", value: 1008181 },
+    { name: "Geely", value: 1002311 },
+    { name: "Tata", value: 937087 },
+    { name: "Subaru", value: 889975 },
+    { name: "Wuling", value: 851935 },
+    { name: "GAC", value: 839537 },
+    { name: "Skoda", value: 804710 },
+    { name: "Chery", value: 799063 },
+    { name: "Daihatsu", value: 783416 },
+    { name: "Volvo", value: 750483 },
+    { name: "Buick", value: 702821 }
+  ],
+  2023: [
     { name: "Toyota", value: 8_569_973 },
     { name: "Volkswagen", value: 4_965_621 },
     { name: "Honda", value: 3_774_161 },
@@ -106,7 +235,8 @@ const brandShares = [
     { name: "Daihatsu", value: 783_416 },
     { name: "Volvo", value: 750_483 },
     { name: "Buick", value: 702_821 }
-]
+  ]
+}
 
 // Colors for the pie segments (kept neutral; Recharts will cycle if fewer than data)
 const PIE_COLORS = [
@@ -148,13 +278,13 @@ function normalizeName(props) {
   return name;
 }
 
-function useWorldTotals() {
+function useWorldTotals(selectedYear) {
   const totalFromCountries = useMemo(
     () => Object.values(countryCars).reduce((a, b) => a + b, 0),
     []
   );
-  // absolute sales numbers per brand
-  const brandsAbs = useMemo(() => brandShares, []);
+  // absolute sales numbers per brand for selected year
+  const brandsAbs = useMemo(() => brandSharesByYear[selectedYear] || brandSharesByYear[2023], [selectedYear]);
   return { totalFromCountries, brandsAbs };
 }
 
@@ -247,7 +377,8 @@ function runSelfTests({ totalFromCountries, brandsAbs }) {
 }
 
 export default function App() {
-  const { totalFromCountries, brandsAbs } = useWorldTotals();
+  const [selectedYear, setSelectedYear] = useState(2023);
+  const { totalFromCountries, brandsAbs } = useWorldTotals(selectedYear);
   const colorFor = useChoroplethScale();
   const [tooltip, setTooltip] = useState({ visible: false, x: 0, y: 0, content: "" });
 
@@ -388,8 +519,19 @@ export default function App() {
 
         {/* Pie Chart Card */}
         <Card className="shadow-sm">
-          <CardHeader className="pb-0">
-            <CardTitle className="text-lg">Данные по продажам за 2023г</CardTitle>
+          <CardHeader className="pb-0 flex flex-row items-center justify-between space-y-0">
+            <CardTitle className="text-lg">Данные по продажам за {selectedYear}г</CardTitle>
+            <select 
+              value={selectedYear} 
+              onChange={(e) => setSelectedYear(Number(e.target.value))}
+              className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value={2019}>2019</option>
+              <option value={2020}>2020</option>
+              <option value={2021}>2021</option>
+              <option value={2022}>2022</option>
+              <option value={2023}>2023</option>
+            </select>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
