@@ -76,8 +76,9 @@ export default function BrandDynamics() {
     const yearLabel = svg
       .append("text")
       .attr("x", width - margin.right)
-      .attr("y", margin.top / 2)
+      .attr("y", margin.top)
       .attr("text-anchor", "end")
+      .attr("dominant-baseline", "middle")
       .attr("font-size", 32)
       .attr("font-weight", 600)
       .attr("opacity", 0);
@@ -122,7 +123,7 @@ export default function BrandDynamics() {
         xAxisG
           .transition()
           .duration(TICK)
-          .ease(d3.easeCubicInOut)
+          .ease(d3.easeLinear)
           .call(axis);
         xAxisG
           .selectAll(".tick")
@@ -134,7 +135,7 @@ export default function BrandDynamics() {
 
       y.domain(d3.range(data.length));
 
-      const t = g.transition().duration(TICK).ease(d3.easeCubicInOut);
+      const t = g.transition().duration(TICK).ease(d3.easeLinear);
 
       const bars = barsG.selectAll("rect").data(data, (d) => d.name);
       bars
@@ -146,7 +147,7 @@ export default function BrandDynamics() {
               .attr("height", y.bandwidth())
               .attr("x", 0)
               .attr("y", innerHeight + y.bandwidth())
-              .attr("width", (d) => x(d.value))
+              .attr("width", 0)
               .attr("opacity", 0)
               .call((enter) =>
                 enter
@@ -259,7 +260,7 @@ export default function BrandDynamics() {
       prevRanksRef.current = new Map(data.map((d) => [d.name, d.rank]));
     };
 
-    updateRef.current();
+    // Initial render is omitted so bars remain empty until animation starts
   }, []);
 
   const start = () => {
