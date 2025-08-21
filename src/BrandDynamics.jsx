@@ -76,6 +76,7 @@ export default function BrandDynamics() {
   useEffect(() => {
     const ctx = canvasRef.current?.getContext("2d");
     if (!ctx) return;
+    window.Chart.register(window.ChartDataLabels);
     chartRef.current = new window.Chart(ctx, {
       type: "bar",
       data: {
@@ -92,11 +93,20 @@ export default function BrandDynamics() {
         responsive: true,
         maintainAspectRatio: false,
         animation: {
-          duration: 800,
-          easing: "easeOutQuart",
+          duration: 1000,
+          easing: "linear",
         },
         plugins: {
           legend: { display: false },
+          datalabels: {
+            anchor: "end",
+            align: "right",
+            formatter: (_, ctx) => {
+              const meta = ctx.chart.getDatasetMeta(0).data[ctx.dataIndex];
+              const value = ctx.chart.scales.x.getValueForPixel(meta.x);
+              return Math.round(value);
+            },
+          },
         },
         scales: {
           x: { beginAtZero: true },
