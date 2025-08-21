@@ -165,6 +165,7 @@ export default function BrandDynamics() {
                 .remove()
             )
         )
+        .attr("height", y.bandwidth())
         .transition(t)
         .attr("width", (d) => x(d.value))
         .attr("y", (d) => y(d.rank));
