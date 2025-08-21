@@ -53,7 +53,7 @@ export default function BrandDynamics() {
   useEffect(() => {
     const width = 800;
     const height = 500;
-    const margin = { top: 40, right: 120, bottom: 30, left: 140 };
+    const margin = { top: 70, right: 120, bottom: 30, left: 140 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 
@@ -76,11 +76,12 @@ export default function BrandDynamics() {
     const yearLabel = svg
       .append("text")
       .attr("x", width - margin.right)
-      .attr("y", margin.top)
+      // Place the year above the plotting area (not overlapping the x-axis)
+      .attr("y", margin.top / 2)
       .attr("text-anchor", "end")
       .attr("dominant-baseline", "middle")
-      .attr("font-size", 32)
-      .attr("font-weight", 600)
+      .attr("font-size", 28)
+      .attr("font-weight", 400)
       .attr("opacity", 0);
 
     const formatValue = d3.format(".0s");
