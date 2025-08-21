@@ -1,14 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  ResponsiveContainer,
-  Cell,
-} from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import csvData from "@/dataset/car_brand_dataset.csv?raw";
 
@@ -58,6 +49,8 @@ export default function BrandDynamics() {
   const [data, setData] = useState(initialData);
   const [year, setYear] = useState(initialYear);
   const timerRef = useRef(null);
+  const canvasRef = useRef(null);
+  const chartRef = useRef(null);
 
   const start = () => {
     if (timerRef.current) return;
@@ -79,6 +72,46 @@ export default function BrandDynamics() {
     setYear(year);
     setData(data);
   }, [step]);
+
+  useEffect(() => {
+    const ctx = canvasRef.current?.getContext("2d");
+    if (!ctx) return;
+    chartRef.current = new window.Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: data.map((d) => d.name),
+        datasets: [
+          {
+            data: data.map((d) => d.value),
+            backgroundColor: COLORS,
+          },
+        ],
+      },
+      options: {
+        indexAxis: "y",
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: {
+          duration: 800,
+          easing: "easeOutQuart",
+        },
+        plugins: {
+          legend: { display: false },
+        },
+        scales: {
+          x: { beginAtZero: true },
+        },
+      },
+    });
+    return () => chartRef.current?.destroy();
+  }, []);
+
+  useEffect(() => {
+    if (!chartRef.current) return;
+    chartRef.current.data.labels = data.map((d) => d.name);
+    chartRef.current.data.datasets[0].data = data.map((d) => d.value);
+    chartRef.current.update();
+  }, [data]);
 
   useEffect(() => {
     return () => clearInterval(timerRef.current);
@@ -112,26 +145,9 @@ export default function BrandDynamics() {
               </button>
               <div className="text-lg font-medium">{year} г.</div>
             </div>
-            <ResponsiveContainer width="100%" height={500}>
-              <BarChart data={data} layout="vertical" margin={{ left: 80 }}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis type="number" />
-                <YAxis dataKey="name" type="category" width={100} />
-                <Bar
-                  dataKey="value"
-                  isAnimationActive
-                  animationDuration={400}
-                  animationEasing="ease-in-out"
-                >
-                  {data.map((entry, index) => (
-                    <Cell
-                      key={`cell-${entry.name}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
+            <div className="w-full h-[500px]">
+              <canvas ref={canvasRef} className="w-full h-full" />
+            </div>
           </CardContent>
         </Card>
       </main>
