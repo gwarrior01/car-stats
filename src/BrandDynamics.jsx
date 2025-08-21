@@ -82,7 +82,7 @@ export default function BrandDynamics() {
       .attr("dominant-baseline", "middle")
       .attr("font-size", 28)
       .attr("font-weight", 400)
-      .attr("opacity", 0);
+      .attr("opacity", 1);
 
     const formatValue = d3.format(".0s");
     const color = d3.scaleOrdinal().domain(ALL_BRANDS).range(COLORS);
@@ -247,17 +247,7 @@ export default function BrandDynamics() {
 
       valuesG.selectAll("text").sort((a, b) => d3.ascending(a.rank, b.rank));
 
-      yearLabel
-        .transition()
-        .duration(200)
-        .attr("opacity", 0)
-        .on("end", function () {
-          d3.select(this)
-            .text(year)
-            .transition()
-            .duration(200)
-            .attr("opacity", 1);
-        });
+      yearLabel.text(year);
 
       prevRanksRef.current = new Map(data.map((d) => [d.name, d.rank]));
     };
