@@ -18,7 +18,8 @@
     "react-simple-maps": "^3.0.0",
     "recharts": "^2.9.0",
     "framer-motion": "^10.16.4",
-    "react-router-dom": "^6.23.0"
+    "react-router-dom": "^6.23.0",
+    "d3": "^7.8.5"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.2.0",
