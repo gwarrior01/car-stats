@@ -243,9 +243,9 @@ export default function BrandDynamics() {
         .attr("y", (d) => y(d.rank) + y.bandwidth() / 2)
         .attr("x", (d) => {
           const w = x(d.value);
-          return w < 40 ? w + 4 : w - 4;
+          return d.value < 1000000 ? w + 4 : w - 4;
         })
-        .attr("text-anchor", (d) => (x(d.value) < 40 ? "start" : "end"))
+        .attr("text-anchor", (d) => (d.value < 1000000 ? "start" : "end"))
         .tween("text", function (d) {
           const currentValue = this.getAttribute("data-value") || 0;
           const i = d3.interpolateNumber(+currentValue, d.value);
