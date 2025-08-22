@@ -42,7 +42,7 @@ const ALL_BRANDS = Array.from(
 const N = 25;
 const TICK = 500;
 
-export default function BrandDynamics({ svgWidth = 800, svgHeight = 500, containerHeight = 700 } = {}) {
+export default function BrandDynamics({ svgWidth = 800, svgHeight = 500, containerHeight = 700, limitBarStretch = true, maxBarHeight = 28, minBarGap = 8 } = {}) {
   const svgRef = useRef(null);
   const timerRef = useRef(null);
   const stepRef = useRef(0);
@@ -144,9 +144,26 @@ export default function BrandDynamics({ svgWidth = 800, svgHeight = 500, contain
           .duration(150)
           .attr("opacity", 1);
       }
+      
+      // Compute dynamic layout height to limit bar stretching when few bars
+      const nBars = data.length;
+      let layoutHeight = innerHeight;
+      let offsetY = 0;
+      if (limitBarStretch && nBars > 0) {
+        const desired = nBars * maxBarHeight + (nBars - 1) * minBarGap;
+        if (desired < innerHeight) {
+          layoutHeight = desired;
+          // Align bars to the top edge instead of centering
+          offsetY = 0;
+        }
+      }
+      y.range([0, layoutHeight]).domain(d3.range(nBars));
 
-      y.domain(d3.range(data.length));
-
+      // Align groups to the top (no vertical centering)
+      barsG.attr("transform", `translate(0, 0)`);
+      labelsG.attr("transform", `translate(0, 0)`);
+      valuesG.attr("transform", `translate(0, 0)`);
+      
       const t = g.transition().duration(TICK).ease(d3.easeLinear);
 
       const bars = barsG.selectAll("rect").data(data, (d) => d.name);
@@ -158,7 +175,7 @@ export default function BrandDynamics({ svgWidth = 800, svgHeight = 500, contain
               .attr("fill", (d) => color(d.name))
               .attr("height", y.bandwidth())
               .attr("x", 0)
-              .attr("y", innerHeight + y.bandwidth())
+              .attr("y", layoutHeight + y.bandwidth())
               .attr("width", 0)
               .attr("opacity", 0)
               .call((enter) =>
@@ -172,7 +189,7 @@ export default function BrandDynamics({ svgWidth = 800, svgHeight = 500, contain
             exit.call((exit) =>
               exit
                 .transition(t)
-                .attr("y", innerHeight + y.bandwidth())
+                .attr("y", layoutHeight + y.bandwidth())
                 .attr("opacity", 0)
                 .remove()
             )
@@ -191,7 +208,7 @@ export default function BrandDynamics({ svgWidth = 800, svgHeight = 500, contain
             enter
               .append("text")
               .attr("x", -6)
-              .attr("y", innerHeight + y.bandwidth() / 2)
+              .attr("y", layoutHeight + y.bandwidth() / 2)
               .attr("dy", "0.35em")
               .attr("text-anchor", "end")
               .attr("opacity", 0)
@@ -206,7 +223,7 @@ export default function BrandDynamics({ svgWidth = 800, svgHeight = 500, contain
           (exit) =>
             exit
               .transition(t)
-              .attr("y", innerHeight + y.bandwidth() / 2)
+              .attr("y", layoutHeight + y.bandwidth() / 2)
               .attr("opacity", 0)
               .remove()
         )
@@ -221,7 +238,7 @@ export default function BrandDynamics({ svgWidth = 800, svgHeight = 500, contain
           (enter) =>
             enter
               .append("text")
-              .attr("y", innerHeight + y.bandwidth() / 2)
+              .attr("y", layoutHeight + y.bandwidth() / 2)
               .attr("dy", "0.35em")
               .attr("opacity", 0)
               .attr("data-value", (d) => d.value)
@@ -236,7 +253,7 @@ export default function BrandDynamics({ svgWidth = 800, svgHeight = 500, contain
           (exit) =>
             exit
               .transition(t)
-              .attr("y", innerHeight + y.bandwidth() / 2)
+              .attr("y", layoutHeight + y.bandwidth() / 2)
               .attr("opacity", 0)
               .remove()
         )
