@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import csvData from "@/dataset/car_brand_dataset.csv?raw";
+import csvData from "@/dataset/bar_chart_race_from_1886.csv?raw";
 import * as d3 from "d3";
 
 const COLORS = [
