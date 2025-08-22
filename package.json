@@ -1,6 +1,6 @@
 {
   "name": "car-stats",
-  "homepage": "https://alexfisher13.github.io/car-stats/",
+  "homepage": "https://AlexFisher13.github.io/car-stats/",
   "version": "1.0.0",
   "description": "React app for visualizing global car statistics",
   "type": "module",
