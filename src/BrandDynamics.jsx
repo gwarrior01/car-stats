@@ -303,6 +303,22 @@ export default function BrandDynamics() {
     }
   };
 
+  const rewind = (steps = 5) => {
+    if (isRunning) {
+      const newStep = Math.max(0, stepRef.current - steps);
+      stepRef.current = newStep;
+      updateRef.current();
+    }
+  };
+
+  const stepBackward = () => rewind(1);
+  const stepForward = () => {
+    if (isRunning && isPaused && stepRef.current < SERIES.length - 1) {
+      stepRef.current += 1;
+      updateRef.current();
+    }
+  };
+
   useEffect(() => {
     return () => timerRef.current?.stop();
   }, []);
@@ -343,12 +359,35 @@ export default function BrandDynamics() {
                 </button>
               )}
               {isRunning && isPaused && (
-                <button
-                  onClick={resume}
-                  className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
-                >
-                  Продолжить
-                </button>
+                <>
+                  <button
+                    onClick={() => rewind(5)}
+                    disabled={stepRef.current === 0}
+                    className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  >
+                    ⏪ -5
+                  </button>
+                  <button
+                    onClick={stepBackward}
+                    disabled={stepRef.current === 0}
+                    className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  >
+                    ⏮ -1
+                  </button>
+                  <button
+                    onClick={stepForward}
+                    disabled={stepRef.current >= SERIES.length - 1}
+                    className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  >
+                    ⏭ +1
+                  </button>
+                  <button
+                    onClick={resume}
+                    className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
+                  >
+                    Продолжить
+                  </button>
+                </>
               )}
             </div>
             <div className="w-full h-[500px] relative">
