@@ -70,7 +70,7 @@ export default function BrandDynamics({ svgWidth = 800, svgHeight = 500, contain
     const x = d3.scaleLinear().range([0, innerWidth]);
     const y = d3.scaleBand().range([0, innerHeight]).paddingInner(0.1);
 
-    const xAxisG = g.append("g").attr("class", "x-axis");
+    const xAxisG = g.append("g").attr("class", "x-axis").attr("display", "none");
     const barsG = g.append("g");
     const labelsG = g.append("g");
     const valuesG = g.append("g");
