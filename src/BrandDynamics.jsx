@@ -86,7 +86,15 @@ export default function BrandDynamics() {
       .attr("font-weight", 400)
       .attr("opacity", 1);
 
-    const formatValue = d3.format(".0s");
+    const formatValue = (value) => {
+      if (value >= 1000000) {
+        return `${(value / 1000000).toFixed(1)}M`;
+      } else if (value >= 1000) {
+        return `${(value / 1000).toFixed(1)}K`;
+      } else {
+        return value.toString();
+      }
+    };
     const color = d3.scaleOrdinal().domain(ALL_BRANDS).range(COLORS);
 
     updateRef.current = function update() {
@@ -215,6 +223,7 @@ export default function BrandDynamics() {
               .attr("y", innerHeight + y.bandwidth() / 2)
               .attr("dy", "0.35em")
               .attr("opacity", 0)
+              .attr("data-value", (d) => d.value)
               .text((d) => formatValue(d.value))
               .call((enter) =>
                 enter
@@ -238,12 +247,12 @@ export default function BrandDynamics() {
         })
         .attr("text-anchor", (d) => (x(d.value) < 40 ? "start" : "end"))
         .tween("text", function (d) {
-          const i = d3.interpolateNumber(
-            +this.textContent.replace(/[^0-9.-]/g, ""),
-            d.value
-          );
+          const currentValue = this.getAttribute("data-value") || 0;
+          const i = d3.interpolateNumber(+currentValue, d.value);
           return function (t) {
-            this.textContent = formatValue(i(t));
+            const interpolatedValue = i(t);
+            this.textContent = formatValue(interpolatedValue);
+            this.setAttribute("data-value", interpolatedValue);
           };
         });
 
