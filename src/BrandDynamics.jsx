@@ -369,19 +369,19 @@ export default function BrandDynamics({ svgWidth = 800, svgHeight = 500, contain
             <CardTitle>Динамика выпуска</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex items-center gap-4">
-              <button
-                onClick={start}
-                disabled={isRunning}
-                className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-              >
-                Старт
-              </button>
-              {isRunning && !isPaused && (
+              <div className="flex flex-wrap items-center gap-2 sm:gap-4">
                 <button
-                  onClick={pause}
-                  className="rounded bg-yellow-600 px-4 py-2 text-white hover:bg-yellow-700"
+                    onClick={start}
+                    disabled={isRunning}
+                    className="rounded bg-blue-600 px-3 py-2 text-white hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-sm sm:px-4 sm:py-2 sm:text-base"
                 >
+                  Старт
+                </button>
+                {isRunning && !isPaused && (
+                    <button
+                        onClick={pause}
+                        className="rounded bg-yellow-600 px-3 py-2 text-white hover:bg-yellow-700 text-sm sm:px-4 sm:py-2 sm:text-base"
+                    >
                   Пауза
                 </button>
               )}
@@ -418,7 +418,7 @@ export default function BrandDynamics({ svgWidth = 800, svgHeight = 500, contain
               )}
             </div>
             <div className="w-full relative" style={{ height: (typeof containerHeight === "number" ? `${containerHeight}px` : containerHeight) }}>
-              <svg ref={svgRef} className="w-full h-full" />
+              <svg ref={svgRef} />
             </div>
           </CardContent>
         </Card>
