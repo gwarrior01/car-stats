@@ -366,7 +366,7 @@ export default function BrandDynamics({ svgWidth = 800, svgHeight = 500, contain
       <main className="mx-auto max-w-7xl px-4 py-6 space-y-6">
         <Card className="shadow-sm">
           <CardHeader>
-            <CardTitle>Динамика выпуска автоконцернов (за всё время)</CardTitle>
+            <CardTitle>Динамика выпуска</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center gap-4">
