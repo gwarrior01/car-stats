@@ -92,7 +92,8 @@ export default function BrandDynamics({ svgWidth = 800, svgHeight = 500, contain
       } else if (value >= 1000) {
         return `${(value / 1000).toFixed(1)}K`;
       } else {
-        return value.toString();
+        // Show plain integer for values below 1000 (no suffix, no decimals)
+        return Math.round(value).toString();
       }
     };
     const color = d3.scaleOrdinal().domain(ALL_BRANDS).range(COLORS);
