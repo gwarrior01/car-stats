@@ -49,6 +49,8 @@ export default function BrandDynamics() {
   const prevRanksRef = useRef(new Map());
   const currentXMaxRef = useRef(0);
   const updateRef = useRef(() => {});
+  const [isRunning, setIsRunning] = React.useState(false);
+  const [isPaused, setIsPaused] = React.useState(false);
 
   useEffect(() => {
     const width = 800;
@@ -260,16 +262,45 @@ export default function BrandDynamics() {
     stepRef.current = 0;
     prevRanksRef.current = new Map();
     currentXMaxRef.current = 0;
+    setIsRunning(true);
+    setIsPaused(false);
     updateRef.current();
     timerRef.current = d3.interval(() => {
       stepRef.current += 1;
       if (stepRef.current >= SERIES.length) {
         timerRef.current.stop();
         timerRef.current = null;
+        setIsRunning(false);
+        setIsPaused(false);
       } else {
         updateRef.current();
       }
     }, TICK);
+  };
+
+  const pause = () => {
+    if (timerRef.current && isRunning && !isPaused) {
+      timerRef.current.stop();
+      timerRef.current = null;
+      setIsPaused(true);
+    }
+  };
+
+  const resume = () => {
+    if (!timerRef.current && isRunning && isPaused) {
+      setIsPaused(false);
+      timerRef.current = d3.interval(() => {
+        stepRef.current += 1;
+        if (stepRef.current >= SERIES.length) {
+          timerRef.current.stop();
+          timerRef.current = null;
+          setIsRunning(false);
+          setIsPaused(false);
+        } else {
+          updateRef.current();
+        }
+      }, TICK);
+    }
   };
 
   useEffect(() => {
@@ -298,10 +329,27 @@ export default function BrandDynamics() {
             <div className="flex items-center gap-4">
               <button
                 onClick={start}
-                className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+                disabled={isRunning}
+                className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
                 Старт
               </button>
+              {isRunning && !isPaused && (
+                <button
+                  onClick={pause}
+                  className="rounded bg-yellow-600 px-4 py-2 text-white hover:bg-yellow-700"
+                >
+                  Пауза
+                </button>
+              )}
+              {isRunning && isPaused && (
+                <button
+                  onClick={resume}
+                  className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
+                >
+                  Продолжить
+                </button>
+              )}
             </div>
             <div className="w-full h-[500px] relative">
               <svg ref={svgRef} className="w-full h-full" />
