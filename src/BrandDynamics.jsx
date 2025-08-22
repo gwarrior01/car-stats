@@ -39,10 +39,10 @@ const ALL_BRANDS = Array.from(
   )
 );
 
-const N = 17;
-const TICK = 1200;
+const N = 25;
+const TICK = 1300;
 
-export default function BrandDynamics() {
+export default function BrandDynamics({ svgWidth = 800, svgHeight = 500, containerHeight = 700 } = {}) {
   const svgRef = useRef(null);
   const timerRef = useRef(null);
   const stepRef = useRef(0);
@@ -53,8 +53,8 @@ export default function BrandDynamics() {
   const [isPaused, setIsPaused] = React.useState(false);
 
   useEffect(() => {
-    const width = 800;
-    const height = 500;
+    const width = svgWidth;
+    const height = svgHeight;
     const margin = { top: 70, right: 120, bottom: 30, left: 140 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
@@ -399,7 +399,7 @@ export default function BrandDynamics() {
                 </>
               )}
             </div>
-            <div className="w-full h-[500px] relative">
+            <div className="w-full relative" style={{ height: (typeof containerHeight === "number" ? `${containerHeight}px` : containerHeight) }}>
               <svg ref={svgRef} className="w-full h-full" />
             </div>
           </CardContent>
