@@ -49,6 +49,8 @@ export default function BrandDynamics() {
   const prevRanksRef = useRef(new Map());
   const currentXMaxRef = useRef(0);
   const updateRef = useRef(() => {});
+  const [isRunning, setIsRunning] = React.useState(false);
+  const [isPaused, setIsPaused] = React.useState(false);
 
   useEffect(() => {
     const width = 800;
@@ -84,7 +86,15 @@ export default function BrandDynamics() {
       .attr("font-weight", 400)
       .attr("opacity", 1);
 
-    const formatValue = d3.format(".0s");
+    const formatValue = (value) => {
+      if (value >= 1000000) {
+        return `${(value / 1000000).toFixed(1)}M`;
+      } else if (value >= 1000) {
+        return `${(value / 1000).toFixed(1)}K`;
+      } else {
+        return value.toString();
+      }
+    };
     const color = d3.scaleOrdinal().domain(ALL_BRANDS).range(COLORS);
 
     updateRef.current = function update() {
@@ -213,6 +223,7 @@ export default function BrandDynamics() {
               .attr("y", innerHeight + y.bandwidth() / 2)
               .attr("dy", "0.35em")
               .attr("opacity", 0)
+              .attr("data-value", (d) => d.value)
               .text((d) => formatValue(d.value))
               .call((enter) =>
                 enter
@@ -236,12 +247,12 @@ export default function BrandDynamics() {
         })
         .attr("text-anchor", (d) => (x(d.value) < 40 ? "start" : "end"))
         .tween("text", function (d) {
-          const i = d3.interpolateNumber(
-            +this.textContent.replace(/[^0-9.-]/g, ""),
-            d.value
-          );
+          const currentValue = this.getAttribute("data-value") || 0;
+          const i = d3.interpolateNumber(+currentValue, d.value);
           return function (t) {
-            this.textContent = formatValue(i(t));
+            const interpolatedValue = i(t);
+            this.textContent = formatValue(interpolatedValue);
+            this.setAttribute("data-value", interpolatedValue);
           };
         });
 
@@ -260,16 +271,61 @@ export default function BrandDynamics() {
     stepRef.current = 0;
     prevRanksRef.current = new Map();
     currentXMaxRef.current = 0;
+    setIsRunning(true);
+    setIsPaused(false);
     updateRef.current();
     timerRef.current = d3.interval(() => {
       stepRef.current += 1;
       if (stepRef.current >= SERIES.length) {
         timerRef.current.stop();
         timerRef.current = null;
+        setIsRunning(false);
+        setIsPaused(false);
       } else {
         updateRef.current();
       }
     }, TICK);
+  };
+
+  const pause = () => {
+    if (timerRef.current && isRunning && !isPaused) {
+      timerRef.current.stop();
+      timerRef.current = null;
+      setIsPaused(true);
+    }
+  };
+
+  const resume = () => {
+    if (!timerRef.current && isRunning && isPaused) {
+      setIsPaused(false);
+      timerRef.current = d3.interval(() => {
+        stepRef.current += 1;
+        if (stepRef.current >= SERIES.length) {
+          timerRef.current.stop();
+          timerRef.current = null;
+          setIsRunning(false);
+          setIsPaused(false);
+        } else {
+          updateRef.current();
+        }
+      }, TICK);
+    }
+  };
+
+  const rewind = (steps = 5) => {
+    if (isRunning) {
+      const newStep = Math.max(0, stepRef.current - steps);
+      stepRef.current = newStep;
+      updateRef.current();
+    }
+  };
+
+  const stepBackward = () => rewind(1);
+  const stepForward = () => {
+    if (isRunning && isPaused && stepRef.current < SERIES.length - 1) {
+      stepRef.current += 1;
+      updateRef.current();
+    }
   };
 
   useEffect(() => {
@@ -298,10 +354,50 @@ export default function BrandDynamics() {
             <div className="flex items-center gap-4">
               <button
                 onClick={start}
-                className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+                disabled={isRunning}
+                className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
                 Старт
               </button>
+              {isRunning && !isPaused && (
+                <button
+                  onClick={pause}
+                  className="rounded bg-yellow-600 px-4 py-2 text-white hover:bg-yellow-700"
+                >
+                  Пауза
+                </button>
+              )}
+              {isRunning && isPaused && (
+                <>
+                  <button
+                    onClick={() => rewind(5)}
+                    disabled={stepRef.current === 0}
+                    className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  >
+                    ⏪ -5
+                  </button>
+                  <button
+                    onClick={stepBackward}
+                    disabled={stepRef.current === 0}
+                    className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  >
+                    ⏮ -1
+                  </button>
+                  <button
+                    onClick={stepForward}
+                    disabled={stepRef.current >= SERIES.length - 1}
+                    className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  >
+                    ⏭ +1
+                  </button>
+                  <button
+                    onClick={resume}
+                    className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
+                  >
+                    Продолжить
+                  </button>
+                </>
+              )}
             </div>
             <div className="w-full h-[500px] relative">
               <svg ref={svgRef} className="w-full h-full" />
