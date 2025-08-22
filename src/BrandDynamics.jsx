@@ -40,7 +40,7 @@ const ALL_BRANDS = Array.from(
 );
 
 const N = 25;
-const TICK = 1300;
+const TICK = 500;
 
 export default function BrandDynamics({ svgWidth = 800, svgHeight = 500, containerHeight = 700 } = {}) {
   const svgRef = useRef(null);
