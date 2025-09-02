@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: car-stats
+  labels:
+    app: car-stats
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: car-stats
+  template:
+    metadata:
+      labels:
+        app: car-stats
+    spec:
+      containers:
+      - name: car-stats
+        image: car-stats:2
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
