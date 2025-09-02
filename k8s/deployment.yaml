@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: car-stats
-        image: car-stats:2
+        image: car-stats:3
         ports:
         - containerPort: 80
         resources:
