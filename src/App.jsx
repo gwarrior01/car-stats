@@ -75,6 +75,34 @@ const countryCars = {
     "South Africa": 10_338_783
 };
 
+// Данные по продажам автомобилей в России
+const russianBrandSharesByYear = {
+  2023: [
+    { name: "Lada", value: 324446 },
+    { name: "Chery", value: 118055 },
+    { name: "Haval", value: 118826 },
+    { name: "Geely", value: 84019 },
+    { name: "GAZ", value: 56077 },
+    { name: "Changan", value: 47500 },
+    { name: "Kia", value: 45000 },
+    { name: "Toyota", value: 35000 },
+    { name: "Hyundai", value: 30000 },
+    { name: "Volkswagen", value: 25000 }
+  ],
+  2024: [
+    { name: "Lada", value: 439035 },
+    { name: "Haval", value: 191560 },
+    { name: "Chery", value: 157899 },
+    { name: "Geely", value: 149924 },
+    { name: "Changan", value: 103388 },
+    { name: "GAZ", value: 75000 },
+    { name: "Kia", value: 60000 },
+    { name: "Toyota", value: 50000 },
+    { name: "Hyundai", value: 45000 },
+    { name: "Volkswagen", value: 35000 }
+  ]
+};
+
 const brandSharesByYear = {
   2019: [
     { name: "Toyota", value: 8578155 },
@@ -288,6 +316,15 @@ function useWorldTotals(selectedYear) {
   return { totalFromCountries, brandsAbs };
 }
 
+function useRussianTotals(selectedYear) {
+  const russianBrands = useMemo(() => russianBrandSharesByYear[selectedYear] || russianBrandSharesByYear[2024], [selectedYear]);
+  const totalRussianSales = useMemo(
+    () => russianBrands.reduce((sum, brand) => sum + brand.value, 0),
+    [russianBrands]
+  );
+  return { russianBrands, totalRussianSales };
+}
+
 function MapTooltip({ x, y, content, visible }) {
   if (!visible) return null;
   return (
@@ -378,7 +415,9 @@ function runSelfTests({ totalFromCountries, brandsAbs }) {
 
 export default function App() {
   const [selectedYear, setSelectedYear] = useState(2023);
+  const [selectedRussianYear, setSelectedRussianYear] = useState(2024);
   const { totalFromCountries, brandsAbs } = useWorldTotals(selectedYear);
+  const { russianBrands, totalRussianSales } = useRussianTotals(selectedRussianYear);
   const colorFor = useChoroplethScale();
   const [tooltip, setTooltip] = useState({ visible: false, x: 0, y: 0, content: "" });
 
@@ -605,6 +644,99 @@ export default function App() {
             <div className="mt-4 flex items-center justify-between text-sm text-slate-600">
               <div>По данным <a className="text-blue-600 underline hover:text-blue-700 hover:underline transition-colors" target="_blank" rel="noopener noreferrer"
                                 href="https://roadgenius.com/cars/statistics/sales-by-manufacturer/">Worldwide Car Sales</a></div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Russian Car Sales Statistics Card */}
+        <Card className="shadow-sm">
+          <CardHeader className="pb-0 flex flex-row items-center justify-between space-y-0">
+            <CardTitle className="text-lg">Продажи автомобилей в России за {selectedRussianYear}г</CardTitle>
+            <select 
+              value={selectedRussianYear} 
+              onChange={(e) => setSelectedRussianYear(Number(e.target.value))}
+              className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value={2023}>2023</option>
+              <option value={2024}>2024</option>
+            </select>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
+              <div className="col-span-2 h-[380px] sm:h-[500px] md:h-[620px]">
+                <ResponsiveContainer width="100%" height="100%">
+                    <PieChart margin={{ top: 24, right: 44, bottom: 24, left: 44 }}>
+                        <Pie
+                            data={russianBrands}
+                            dataKey="value"
+                            nameKey="name"
+                            cx="50%"
+                            cy="50%"
+                            outerRadius="80%"
+                            innerRadius="50%"
+                            paddingAngle={1}
+                            labelLine={false}
+                            label={renderPieLabel}
+                            onMouseMove={(data, index, e) => {
+                              const name = data?.name ?? data?.payload?.name ?? "";
+                              const value = data?.value ?? data?.payload?.value ?? 0;
+                              const x = e?.clientX ?? 0;
+                              const y = e?.clientY ?? 0;
+                              if (name) {
+                                setTooltip({
+                                  visible: true,
+                                  x,
+                                  y,
+                                  content: (
+                                    <div className="flex flex-col">
+                                      <span className="font-medium">{name}</span>
+                                      <span className="text-slate-600">{formatNumber(value)} авто</span>
+                                    </div>
+                                  ),
+                                });
+                              }
+                            }}
+                            onMouseLeave={() => setTooltip((t) => ({ ...t, visible: false }))
+                            }
+                        >
+                      {russianBrands.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                      ))}
+                    </Pie>
+                  </PieChart>
+              </ResponsiveContainer>
+              </div>
+              <MapTooltip {...tooltip} />
+              <div className="col-span-1 flex justify-center lg:justify-start">
+                <div className="overflow-x-auto">
+                  <table className="table-auto w-auto whitespace-nowrap text-sm mx-auto">
+                    <thead>
+                      <tr>
+                        <th className="text-center pr-2">Место</th>
+                        <th className="text-left">Бренд</th>
+                        <th className="text-right">Количество</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {russianBrands.slice(0, 10).map((b, index) => (
+                        <tr key={b.name}>
+                          <td className="text-center pr-2">{index + 1}</td>
+                          <td>{b.name}</td>
+                          <td className="text-right">{formatNumber(b.value)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div className="mt-4 flex items-center justify-between text-sm text-slate-600">
+              <div>
+                Всего автомобилей продано: {formatNumber(totalRussianSales)}<br/>
+                По данным <a className="text-blue-600 underline hover:text-blue-700 hover:underline transition-colors" target="_blank" rel="noopener noreferrer"
+                                href="https://www.autostat.ru/">Автостат</a> и <a className="text-blue-600 underline hover:text-blue-700 hover:underline transition-colors" target="_blank" rel="noopener noreferrer"
+                                href="https://www.avtostat-info.com/">АвтоСтат ИНФО</a>
+              </div>
             </div>
           </CardContent>
         </Card>
